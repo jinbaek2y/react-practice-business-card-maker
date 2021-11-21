@@ -1,0 +1,71 @@
+.container {
+  width: 100%;
+  /* background-color: rgba(0, 0, 0, 0.3); */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.9em;
+  /* align-items: center; */
+  /* justify-content: flex-end; */
+  /* align-items: center; */
+  /* border-right: 2px solid rgba(0, 0, 0, 0.1); */
+}
+.templete {
+  display: grid;
+  grid-template-rows: 1.5em 1.5em 2.2em  1.8em;
+  grid-template-columns: 1fr;
+  /* background-color: lightblue; */
+}
+.firstRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 100%;
+  /* width: 5vw; */
+}
+.secondRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.thirdRow {
+  display: flex;
+  height: 100%;
+
+}
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.button {
+  /* display: block; */
+  background-color: white;
+  border: solid rgba(0, 0, 0, 0.3) 2px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  /* border-radius: 10px; */
+}
+
+.button:first-child {
+  background-color: lightgray;
+  /* background-color: lightblue; */
+  border-right: none;
+}
+
+.button:first-child.hasData {
+  background-color: lightblue;
+}
+
+.button:last-child {
+  background-color: #3B5463;
+  color: white;
+  
+}
+input {
+  /* color: red; */
+  width: 100%;
+  font-size: 0.7em;
+  outline: 0;
+  border-radius: none;
+  border-width: 1px;
+  border: solid rgba(0, 0, 0, 0.3) 1.5px;
+}

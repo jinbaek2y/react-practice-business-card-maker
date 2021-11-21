@@ -1,0 +1,9 @@
+.container {
+  background-color: #3B5463;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 8vh;
+  color: white;
+  /* font-weight: 200; */
+}

@@ -44,7 +44,10 @@
   font-size: 1.8rem;
   margin: 0.3em 0;
 }
-h3, h5{
+.h3 {
+  margin: 0;
+}
+.h5 {
   margin: 0;
 }
 
@@ -56,7 +59,7 @@ h3, h5{
   height: 2.2em;
 }
 
-button {
+.button {
   display: block;
   border: none;
   background-color: white;
