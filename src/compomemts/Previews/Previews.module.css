@@ -1,5 +1,6 @@
 .container {
   width: 50%;
-  padding: 0.2em 0.5em;
+  padding: 0.2em 2.9em;
   /* border-left: 2px solid rgba(0, 0, 0, 0.1); */
+  overflow: auto;
 }

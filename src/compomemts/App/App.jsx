@@ -58,7 +58,7 @@ function App({ firebase }) {
         <Header />
         <div className={styles.contents}>
           <Cards list={list} handleAdd={onAdd} handleDelete={onDelete} />
-          <Previews />
+          <Previews list={list} />
         </div>
         <Footer />
       </div>

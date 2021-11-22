@@ -7,7 +7,7 @@ const Card = ({ handleClick, data }) => {
   //useMemo
   const hasData = data !== undefined;
 
-  const name = hasData ? 'hasName!' : 'No file';
+  const name = hasData ? 'Name' : 'No file';
   const buttonType = hasData ? 'Delete' : 'Add';
   const buttonClass = hasData ? `${styles.button} ${styles.hasData}` : `${styles.button}`;
 
