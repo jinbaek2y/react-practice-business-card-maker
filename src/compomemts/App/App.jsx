@@ -9,23 +9,45 @@ import Footer from "../Footer/Footer";
 
 function App({ firebase }) {
   console.log("firebase paased :", firebase);
-  const [data, setData] = useState('');
+  const [data, setData] = useState(null);
+  const [index, setIndex] = useState(null);
   const [list, setList] = useState([]);
   const inputRef = useRef(null);
   const clientId = process.env.REACT_APP_CLIENT_ID;
   const navigate = useNavigate();
+  const userId = 'jinbaek@ny@google@login';
   useEffect(() => {
-    const path = 'test/test3/depth';
+    const path = userId;
     firebase.subscribeValue(path, setData);
+    setIndex(() => data?.length === undefined ? 0 : data.length);
   }, []);
+  console.log("data?: ", data === undefined);
+  console.log("data.lengh?: ", data?.length);
+  console.log("index: ", index);
+
+  const onAdd = (info) => {
+    console.log("info befre: ", info);
+    console.log("index: ", index);
+    const path = `${userId}/${index}/`;
+    console.log("info after: ", info);
+    firebase.setValue(path, info);
+    console.log("onAdd..data.length: ", data?.length);
+    setIndex(index + 1);
+    console.log("onAdd..after setindex, index : ", index);
+  }
+
+  setTimeout(() => {
+    const path = `${userId}/1`;
+    firebase.setValue(path, null);
+  }, 2000)
 
   const handleChange = (e) => {
     // console.log("value: ", e.target.value);
     // console.log("value: ", inputRef.current.value);
-    const query = e.target.value
-    const path = 'test/test3/depth';
-    firebase.setValue(query, path);
-    setData(query);
+    // const query = e.target.value
+    // const path = 'test/test3/depth';
+    // firebase.setValue(query, path);
+    // setData(query);
   }
 
 
@@ -44,9 +66,6 @@ function App({ firebase }) {
     cookiePolicy: 'single_host_origin',
   })
 
-  const onAdd = () => {
-    setList([...list, 1]);
-  }
 
   const onDelete = () => {
     console.log("soon, will be updated delete function");
@@ -57,8 +76,8 @@ function App({ firebase }) {
       <div className={styles.container}>
         <Header />
         <div className={styles.contents}>
-          <Cards list={list} handleAdd={onAdd} handleDelete={onDelete} />
-          <Previews list={list} />
+          <Cards list={data} handleAdd={onAdd} handleDelete={onDelete} index={index} />
+          <Previews list={data} />
         </div>
         <Footer />
       </div>

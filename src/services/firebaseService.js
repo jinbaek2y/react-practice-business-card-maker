@@ -13,9 +13,9 @@ class FirebaseService {
       console.log("subscribeValue call, coz detected data change.....");
       console.log("subscribeValue snapshot", snapshot)
       if (snapshot.exists()) {
-        console.log("cahnged Data: ", snapshot.val().userInput);
-        // setData(snapshot.val().userInput);
-        callback(snapshot.val().userInput)
+        callback(snapshot.val());
+        console.log(`${path} changed data detected: ${snapshot.val()}`);
+        console.log("changed data : ", snapshot.val());
       } else {
         console.log("No data available");
       }
@@ -23,10 +23,16 @@ class FirebaseService {
     )
   }
 
-  setValue(query, path) {
-    set(ref(database, path), {
-      userInput: query,
-    })
+  setValue(path, info) {
+    console.log(`setValue called, path: ${path}, || info: ${info}`);
+    console.log("setValue info: ", info);
+    set(ref(database, path), info)
+      .then((res) => {
+        console.log("[setValue] data saved successfully, res: ", res);
+      })
+      .catch((error) => {
+        console.log("[setValue] data svaed failled, coz: ", error);
+      })
   }
 
 

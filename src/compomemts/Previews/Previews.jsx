@@ -6,12 +6,15 @@ const Previews = ({ list, handleAdd, handleDelete }) => {
 
   return (
     <>
+
+
       <div className={styles.container}>
         <h3>Card Previews</h3>
         {
-          list?.map(val => <Preview data={'good'} />)
+          list?.map((data, index) => <Preview data={data} key={index} />)
         }
       </div>
+
     </>
   )
 }
