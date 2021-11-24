@@ -18,6 +18,7 @@ class FirebaseService {
         console.log("changed data : ", snapshot.val());
       } else {
         console.log("No data available");
+        callback(null);
       }
     }
     )

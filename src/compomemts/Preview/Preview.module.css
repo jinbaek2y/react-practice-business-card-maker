@@ -15,6 +15,7 @@
 .img {
   width: 10vw;
   margin-right: 2.1em;
+  border-radius: 50%;
 }
 .text {
   font-size: 0.8rem;
