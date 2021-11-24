@@ -4,7 +4,8 @@ import { useRef, useEffect } from 'react';
 import { useState } from 'react';
 // import { myWidget } from '../../Config/cloudinary';
 
-const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken }) => {
+const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken, imgRef, mapIndex, imgRefs }) => {
+  const [loading, setLoading] = useState(false);
   const hasData = data !== undefined;
   const name = hasData ? data.name : 'image file';
   const buttonType = hasData ? 'Delete' : 'Add';
@@ -15,23 +16,32 @@ const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleIm
   const emailRef = useRef(null);
   const titleRef = useRef(null);
   const messageRef = useRef(null);
+
   // const imgURL = null;
 
+  const handleLodaing = (bool) => {
+    setLoading(bool);
+  }
   const handleImg = () => {
     console.log("in handleImg, widget exis? :", utility?.widget);
 
     if (data !== undefined && utility?.widget) {
       console.log("alreay exist thing, modifying....");
       const info = {
-        'index': data.index,
-        'name': nameRef?.current?.value,
-        'color': colorRef?.current?.value,
-        'company': companyRef?.current?.value,
-        'email': emailRef?.current?.value,
-        'title': titleRef?.current?.value,
-        'message': messageRef?.current?.value,
-        'avatar_url': data.avatar_url ? data.avatar_url : null,
-        'imgDeleteToken': data.imgDeleteToken,
+        totalInfo: {
+          'index': data.index,
+          'name': nameRef?.current?.value,
+          'color': colorRef?.current?.value,
+          'company': companyRef?.current?.value,
+          'email': emailRef?.current?.value,
+          'title': titleRef?.current?.value,
+          'message': messageRef?.current?.value,
+          'avatar_url': data.avatar_url ? data.avatar_url : null,
+          'imgDeleteToken': data.imgDeleteToken ? data.imgDeleteToken : null,
+        },
+        loadingInfo: {
+          handleLodaing,
+        }
       }
       handleInfo(info);
       utility?.widget?.open();
@@ -61,7 +71,7 @@ const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleIm
       'message': messageRef?.current?.value,
       'avatar_url': data.avatar_url ? data.avatar_url :
         null,
-      'imgDeleteToken': data.imgDeleteToken,
+      'imgDeleteToken': data.imgDeleteToken ? data.imgDeleteToken : null,
     }
 
     handleChange?.(data.index, info);
@@ -91,7 +101,7 @@ const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleIm
         'avatar_url': imgURL,
         'imgDeleteToken': imgDeleteToken,
       }
-
+      //
       handleClick(info);
       infoRest();
       handleImgURL(null);
@@ -126,7 +136,10 @@ const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleIm
             value={data?.message} onChange={onChange} />
         </div>
         <div className={styles.buttons}>
-          <button className={buttonClass} onClick={handleImg}>{name}</button>
+          <button className={buttonClass} onClick={handleImg}>
+            {loading ? 'loading..' : `${name}`
+            }
+          </button>
           <button className={styles.button} onClick={onClick}>{buttonType}</button>
         </div>
       </div>

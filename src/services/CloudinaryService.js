@@ -38,6 +38,7 @@ class CloudinaryService {
           console.log("img done, callbacks: ", this.callbacks);
           this.callbacks?.[1](result.info.delete_token);
           this.callbacks?.[0](myUrl);
+          // this.callbacks?.[2](false);
         }
       }
       );
@@ -54,6 +55,9 @@ class CloudinaryService {
 
   setCallback(callback) {
     this.callbacks.push(callback);
+  }
+  getCallbacksLength() {
+    return this.callbacks.length;
   }
   setutility(callback) {
     console.log("setutility called");

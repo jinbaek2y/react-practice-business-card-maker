@@ -8,28 +8,32 @@ class FirebaseService {
   }
   //useSubscribeValue ? specifed path's data changed, isolated state -> return snapshot.val()
 
-  subscribeValue(path, callback) {
+  subscribeValue(path, dataCallback, loadingCallback) {
     onValue(ref(database, path), (snapshot) => {
       console.log("subscribeValue call, coz detected data change.....");
       console.log("subscribeValue snapshot", snapshot)
       if (snapshot.exists()) {
-        callback(snapshot.val());
+        dataCallback(snapshot.val());
+        // loadingCallback(false);
         console.log(`${path} changed data detected: ${snapshot.val()}`);
         console.log("changed data : ", snapshot.val());
       } else {
         console.log("No data available");
-        callback(null);
+        dataCallback(null);
       }
     }
     )
   }
 
-  setValue(path, info) {
+  setValue(path, info, loadingCallback) {
     console.log(`setValue called, path: ${path}, || info: ${info}`);
     console.log("setValue info: ", info);
     set(ref(database, path), info)
       .then((res) => {
         console.log("[setValue] data saved successfully, res: ", res);
+        if (loadingCallback) {
+          // loadingCallback(false);
+        }
       })
       .catch((error) => {
         console.log("[setValue] data svaed failled, coz: ", error);

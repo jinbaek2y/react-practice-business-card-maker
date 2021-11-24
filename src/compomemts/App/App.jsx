@@ -6,6 +6,7 @@ import Cards from "../Cards/Cards";
 import Header from "../Header/Header";
 import Previews from "../Previews/Previews";
 import Footer from "../Footer/Footer";
+import { useCallback } from "react";
 
 function App({ firebase, cloudnary }) {
   const [data, setData] = useState(null);
@@ -15,27 +16,47 @@ function App({ firebase, cloudnary }) {
   const [imgURL, setImgURL] = useState(null);
   const [imgDeleteToken, setImgDeleteToken] = useState(null);
   const [targetInfo, setTargetInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
   const inputRef = useRef(null);
+  const handledInputRef = useRef(null);
+  const imgRefs = useRef([]);
   const clientId = process.env.REACT_APP_CLIENT_ID;
   const navigate = useNavigate();
   const userId = 'jinbaek@ny@google@login';
   const utility = cloudnary?.utility;
   console.log("in App, targetInfo: ", targetInfo);
-  console.log("imgDeleteToken: ", imgDeleteToken);
-  console.log("targetInfo: ", targetInfo);
-  // for (let f of cloudnary?.callbacks) {
-  //   console.log("callbacks f: ", f);
-  // }
+  // console.log("imgDeleteToken: ", imgDeleteToken);
+  // console.log("targetInfo: ", targetInfo);
+
+  // console.log("in App !  imgRefs collections: ", imgRefs);
+  const handleRef = useCallback(
+    (el) => {
+      const hasAlreadyEl = imgRefs.current.indexOf(el);
+      console.log("App -> hasAlreadyEl", hasAlreadyEl);
+      if (el !== null && hasAlreadyEl === -1) {
+        console.log("callbackRef called ! el: ", el);
+        handledInputRef.current = el;
+        imgRefs.current.push(el);
+      }
+    },
+  );
+
+  console.log("in app, handledInputRef: ", handledInputRef);
+  console.log("in app, imgRefs: ", imgRefs);
 
   useEffect(() => {
-    cloudnary.setCallback(setImgURL);
-    cloudnary.setCallback(setImgDeleteToken);
+    console.log("cloudnary.setCallbacks.length: ", cloudnary.getCallbacksLength());
+    if (cloudnary.getCallbacksLength() < 2) {
+      cloudnary.setCallback(setImgURL);
+      cloudnary.setCallback(setImgDeleteToken);
+      cloudnary.setCallback(setLoading);
+    }
     console.log('cloudary setCalbaas, is change?:', cloudnary);
   }, []);
 
   useEffect(() => {
     const path = userId;
-    firebase.subscribeValue(path, setData);
+    firebase.subscribeValue(path, setData, setLoading);
   }, []);
 
   useEffect(() => {
@@ -48,11 +69,13 @@ function App({ firebase, cloudnary }) {
   useEffect(() => {
     if (imgURL !== null) {
       if (targetInfo !== null) {
-        const path = `${userId}/${targetInfo.index}`;
-        targetInfo.avatar_url = imgURL;
-        cloudnary.deleteByToken(targetInfo.imgDeleteToken);
-        targetInfo.imgDeleteToken = imgDeleteToken;
-        firebase.setValue(path, targetInfo);
+
+        targetInfo.loadingInfo.handleLodaing(true);
+        const path = `${userId}/${targetInfo.totalInfo.index}`;
+        targetInfo.totalInfo.avatar_url = imgURL;
+        cloudnary.deleteByToken(targetInfo.totalInfo.imgDeleteToken);
+        targetInfo.totalInfo.imgDeleteToken = imgDeleteToken;
+        firebase.setValue(path, targetInfo.totalInfo);
         return;
       }
     }
@@ -64,17 +87,29 @@ function App({ firebase, cloudnary }) {
   }
 
   const onAdd = (info) => {
+    // setTargetLoading(true);
     const path = `${userId}/${index}/`;
-    firebase.setValue(path, info);
+    firebase.setValue(path, info, setLoading);
     setIndex(index + 1);
   }
-
+  // handleClick(data?.index, data?.imgDeleteToken);
   const onDelete = (targetIndex, imgDeleteToken) => {
     const path = `${userId}/${targetIndex}`;
 
     //here before db delete first of all posh fetch cloudinary delete
     //delete -> in useEffect ?
-    cloudnary.deleteByToken(imgDeleteToken);
+    // if (imgRef) {
+    //   const targetIndex = imgRefs.current.indexOf(imgRef);
+    //   if (targetIndex !== -1) {
+    //     console.log("imgRef  will be targetIndex: ", targetIndex)
+    //     imgRefs.current.splice(targetIndex, 1);
+    //     console.log("imgRef removed, result: ", imgRefs.current);
+    //   }
+    // }
+    if (imgDeleteToken) {
+
+      cloudnary.deleteByToken(imgDeleteToken);
+    }
     firebase.setValue(path, null);
   };
 
@@ -105,8 +140,10 @@ function App({ firebase, cloudnary }) {
       <div className={styles.container}>
         <Header />
         <div className={styles.contents}>
-          <Cards list={data} handleAdd={onAdd} handleDelete={onDelete} index={index} handleChange={onChange} widget={widget} imgURL={imgURL} handleImgURL={setImgURL} handleInfo={handleInfo} targetInfo={targetInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
-          <Previews list={data} />
+          <Cards list={data} handleAdd={onAdd} handleDelete={onDelete} index={index} handleChange={onChange} widget={widget} imgURL={imgURL} handleImgURL={setImgURL} handleInfo={handleInfo} targetInfo={targetInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} loading={loading} imgRefs={imgRefs} />
+
+          <Previews list={data} loading={loading} handleLoading={setLoading} imgURL={imgURL} index={index} targetInfo={targetInfo}
+            handleRef={handleRef} />
         </div>
         <Footer />
       </div>
