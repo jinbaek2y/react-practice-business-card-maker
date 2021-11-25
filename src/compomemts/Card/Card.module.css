@@ -4,10 +4,6 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 0.9em;
-  /* align-items: center; */
-  /* justify-content: flex-end; */
-  /* align-items: center; */
-  /* border-right: 2px solid rgba(0, 0, 0, 0.1); */
 }
 .templete {
   display: grid;
@@ -68,4 +64,8 @@ input {
   border-radius: none;
   border-width: 1px;
   border: solid rgba(0, 0, 0, 0.3) 1.5px;
+}
+input[type="color"] {
+  padding: 0;
+  padding-right: 6em;
 }

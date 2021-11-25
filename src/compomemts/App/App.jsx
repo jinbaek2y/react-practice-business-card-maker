@@ -25,10 +25,7 @@ function App({ firebase, cloudnary }) {
   const userId = 'jinbaek@ny@google@login';
   const utility = cloudnary?.utility;
   console.log("in App, targetInfo: ", targetInfo);
-  // console.log("imgDeleteToken: ", imgDeleteToken);
-  // console.log("targetInfo: ", targetInfo);
 
-  // console.log("in App !  imgRefs collections: ", imgRefs);
   const handleRef = useCallback(
     (el) => {
       const hasAlreadyEl = imgRefs.current.indexOf(el);
@@ -140,7 +137,7 @@ function App({ firebase, cloudnary }) {
       <div className={styles.container}>
         <Header />
         <div className={styles.contents}>
-          <Cards list={data} handleAdd={onAdd} handleDelete={onDelete} index={index} handleChange={onChange} widget={widget} imgURL={imgURL} handleImgURL={setImgURL} handleInfo={handleInfo} targetInfo={targetInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} loading={loading} imgRefs={imgRefs} />
+          <Cards list={data} handleAdd={onAdd} handleDelete={onDelete} index={index} handleChange={onChange} widget={widget} imgURL={imgURL} handleImgURL={setImgURL} handleInfo={handleInfo} targetInfo={targetInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
 
           <Previews list={data} loading={loading} handleLoading={setLoading} imgURL={imgURL} index={index} targetInfo={targetInfo}
             handleRef={handleRef} />

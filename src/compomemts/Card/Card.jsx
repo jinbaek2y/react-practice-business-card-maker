@@ -4,21 +4,34 @@ import { useRef, useEffect } from 'react';
 import { useState } from 'react';
 // import { myWidget } from '../../Config/cloudinary';
 
-const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken, imgRef, mapIndex, imgRefs }) => {
+const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken }) => {
   const [loading, setLoading] = useState(false);
   const hasData = data !== undefined;
   const name = hasData ? data.name : 'image file';
   const buttonType = hasData ? 'Delete' : 'Add';
   const buttonClass = hasData ? `${styles.button} ${styles.hasData}` : `${styles.button}`;
   const nameRef = useRef(null);
-  const colorRef = useRef(null);
+  const colorRef = useRef('#ffffff');
   const companyRef = useRef(null);
   const emailRef = useRef(null);
   const titleRef = useRef(null);
   const messageRef = useRef(null);
+  const containerRef = useRef(null);
+  const infoInisialSet = () => {
+    nameRef.current.value = data.name;
+    colorRef.current.value = data.color;
+    companyRef.current.value = data.company
+    emailRef.current.value = data.email;
+    titleRef.current.value = data.title;
+    messageRef.current.value = data.message;
+  }
 
-  // const imgURL = null;
+  useEffect(() => {
+    if (data) {
+      infoInisialSet();
+    }
 
+  }, []);
   const handleLodaing = (bool) => {
     setLoading(bool);
   }
@@ -56,8 +69,12 @@ const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleIm
     utility?.widget?.open();
   }
 
-  const onChange = () => {
+  const onChange = (e) => {
     if (data === undefined) {
+      if (e.target === colorRef.current) {
+        console.log("current: ", colorRef.current.value);
+        console.log("e.target.value: ", e.target.value);
+      }
       return;
     }
 
@@ -86,7 +103,6 @@ const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleIm
   }
 
   const onClick = () => {
-    // console.log("info: ", info);
     if (data === undefined) {
       // add method apply
       console.log("onClick => add method");
@@ -116,24 +132,24 @@ const Card = ({ handleClick, data, index, handleChange, widget, imgURL, handleIm
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={containerRef}>
       <div className={styles.templete}>
         <div className={styles.firstRow}>
           <input className={styles.input} placeholder={'Name'} ref={nameRef} value={data?.name} onChange={onChange} />
           <input placeholder={'Company'} ref={companyRef}
-            value={data?.company} onChange={onChange} />
-          <input placeholder={'Light'} ref={colorRef}
-            value={data?.color} onChange={onChange} />
+            onChange={onChange} />
+          <input type={'color'} ref={colorRef}
+            onChange={onChange} />
         </div>
         <div className={styles.secondRow}>
           <input placeholder={'Title'} ref={titleRef}
-            value={data?.title} onChange={onChange} />
+            onChange={onChange} />
           <input placeholder={'Email'} ref={emailRef}
-            value={data?.email} onChange={onChange} />
+            onChange={onChange} />
         </div>
         <div className={styles.thirdRow}>
           <input placeholder={'Message'} ref={messageRef}
-            value={data?.message} onChange={onChange} />
+            onChange={onChange} />
         </div>
         <div className={styles.buttons}>
           <button className={buttonClass} onClick={handleImg}>
