@@ -11,7 +11,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
   const buttonType = hasData ? 'Delete' : 'Add';
   const buttonClass = hasData ? `${styles.button} ${styles.hasData}` : `${styles.button}`;
   const nameRef = useRef(null);
-  const colorRef = useRef('#ffffff');
+  const colorRef = useRef(null);
   const companyRef = useRef(null);
   const emailRef = useRef(null);
   const titleRef = useRef(null);
@@ -29,9 +29,11 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
   useEffect(() => {
     if (data) {
       infoInisialSet();
+      return;
     }
-
+    colorRef.current.value = '#ffffff';
   }, []);
+
   const handleLodaing = (bool) => {
     setLoading(bool);
   }
@@ -72,8 +74,9 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
   const onChange = (e) => {
     if (data === undefined) {
       if (e.target === colorRef.current) {
-        console.log("current: ", colorRef.current.value);
-        console.log("e.target.value: ", e.target.value);
+        // console.log("current: ", colorRef.current.value);
+        // console.log("e.target.value: ", e.target.value);
+        // colorRef.current.value = e.target.value;
       }
       return;
     }
@@ -95,7 +98,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
   }
   const infoRest = () => {
     nameRef.current.value = null;
-    colorRef.current.value = null;
+    colorRef.current.value = '#ffffff';
     companyRef.current.value = null;
     emailRef.current.value = null;
     titleRef.current.value = null;

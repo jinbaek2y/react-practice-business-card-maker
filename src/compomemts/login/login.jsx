@@ -93,8 +93,8 @@ const Login = () => {
 
       <div className={styles.login}>
         <div className={styles.header}>
-          <img className={styles.img} src={"./images/logo.png"} />
-          <h1 className={styles.text}>
+          <img className={styles.img} src={"./images/logo.png"} alt="wait" />
+          <h1>
             Business Card Maker
           </h1>
         </div>
@@ -109,7 +109,7 @@ const Login = () => {
           <h5>Code your dream</h5>
         </div>
       </div>
-    </div>
+    </div >
   )
 };
 
