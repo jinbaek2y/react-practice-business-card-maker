@@ -1,15 +1,10 @@
 import React from 'react';
 import Card from '../Card/Card';
 import styles from './Cards.module.css';
-const Cards = ({ list, handleAdd, handleDelete, index, handleChange, widget, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken }) => {
-  console.log("cards, db list: ", list);
-  //edge case, firebase error? [dat1, dat2, data3] in case,
-  //delete data2 -> [data1, emty, data3 ]
-  //dlelte data1 -> array is out, {2: data3} general object converted,
-  //so => convert values on array
+const Cards = ({ list, handleAdd, handleDelete, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken }) => {
   if (list !== null && !Array.isArray(list)) {
     list = Object.values(list);
-    console.log('list: ', list);
+    // console.log('list: ', list);
   }
   return (
     <>
@@ -20,7 +15,7 @@ const Cards = ({ list, handleAdd, handleDelete, index, handleChange, widget, img
         {
           list?.map?.((data, mapIndex) => <Card handleClick={handleDelete} data={data} key={mapIndex} handleChange={handleChange} imgURL={imgURL} handleImgURL={handleImgURL} handleInfo={handleInfo} utility={utility} />)
         }
-        <Card handleClick={handleAdd} index={index} widget={widget} imgURL={imgURL} handleImgURL={handleImgURL} targetInfo={targetInfo} handleInfo={handleInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
+        <Card handleClick={handleAdd} index={index} imgURL={imgURL} handleImgURL={handleImgURL} targetInfo={targetInfo} handleInfo={handleInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
       </div>
 
     </>

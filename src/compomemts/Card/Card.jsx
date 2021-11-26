@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './Card.module.css';
 import { useRef, useEffect } from 'react';
 import { useState } from 'react';
-// import { myWidget } from '../../Config/cloudinary';
 
 const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken }) => {
   const [loading, setLoading] = useState(false);
@@ -17,31 +16,36 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
   const titleRef = useRef(null);
   const messageRef = useRef(null);
   const containerRef = useRef(null);
-  const infoInisialSet = () => {
-    nameRef.current.value = data.name;
-    colorRef.current.value = data.color;
-    companyRef.current.value = data.company
-    emailRef.current.value = data.email;
-    titleRef.current.value = data.title;
-    messageRef.current.value = data.message;
-  }
+  // const infoInisialSet = () => {
+  //   nameRef.current.value = data.name;
+  //   colorRef.current.value = data.color;
+  //   companyRef.current.value = data.company
+  //   emailRef.current.value = data.email;
+  //   titleRef.current.value = data.title;
+  //   messageRef.current.value = data.message;
+  // }
 
   useEffect(() => {
     if (data) {
-      infoInisialSet();
+      nameRef.current.value = data.name;
+      colorRef.current.value = data.color;
+      companyRef.current.value = data.company
+      emailRef.current.value = data.email;
+      titleRef.current.value = data.title;
+      messageRef.current.value = data.message;
       return;
     }
     colorRef.current.value = '#ffffff';
-  }, []);
+  }, [data]);
 
   const handleLodaing = (bool) => {
     setLoading(bool);
   }
   const handleImg = () => {
-    console.log("in handleImg, widget exis? :", utility?.widget);
+    // console.log("in handleImg, widget exis? :", utility?.widget);
 
     if (data !== undefined && utility?.widget) {
-      console.log("alreay exist thing, modifying....");
+      // console.log("alreay exist thing, modifying....");
       const info = {
         totalInfo: {
           'index': data.index,
@@ -63,9 +67,9 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
       return;
     }
 
-    console.log("not exist, first !");
+    // console.log("not exist, first !");
     if (targetInfo !== null) {
-      console.log("target info --> null");
+      // console.log("target info --> null");
       handleInfo(null);
     }
     utility?.widget?.open();
@@ -108,7 +112,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
   const onClick = () => {
     if (data === undefined) {
       // add method apply
-      console.log("onClick => add method");
+      // console.log("onClick => add method");
       const info = {
         'index': index,
         'name': nameRef?.current?.value,
@@ -156,7 +160,10 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
         </div>
         <div className={styles.buttons}>
           <button className={buttonClass} onClick={handleImg}>
-            {loading ? 'loading..' : `${name}`
+            {loading ? <div className={styles.spiner} >
+              {/* <i class="fas fa-spinner"></i> */}
+              <i className="fas fa-circle-notch fa-2x"></i>
+            </div> : `${name}`
             }
           </button>
           <button className={styles.button} onClick={onClick}>{buttonType}</button>

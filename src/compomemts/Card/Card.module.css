@@ -69,3 +69,33 @@ input[type="color"] {
   padding: 0;
   padding-right: 6em;
 }
+@keyframes test {
+  0% {
+    transform: translateX(5.5em) ;
+  }
+  100% {
+    transform:  translateX(5.5em) rotateZ(360deg) ;
+  }
+}
+.spiner {
+  color: gray;
+  /* background-color: gray; */
+  width: 50%;
+  height: 4.7vh;
+  padding: 0 0.5rem;
+  transform: translateX(9.5em);
+  border-radius: 0;
+  /* transform: rotate(50deg); */
+  /* transition: transform 0.5s ease-in-out; */
+  animation: test 1.2s linear infinite;
+}
+
+.spinerImg {
+
+}
+
+/* .spiner:hover {
+  transform: translateX(9.5em) scale(1.7) rotate(360deg);
+  animation: test 2s linear infinite;
+  transform: translateX(9.5em);
+} */

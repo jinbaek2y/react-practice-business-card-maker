@@ -2,7 +2,7 @@ import React from 'react';
 import Preview from '../Preview/Preview';
 import styles from './Previews.module.css';
 
-const Previews = ({ list, loading, handleLoading, imgURL, index, targetInfo, handleRef }) => {
+const Previews = ({ list, loading, handleLoading, imgURL, index, targetInfo, handleRef, handleTaretInfo, handleImgURL }) => {
   if (list !== null && !Array.isArray(list)) {
     list = Object.values(list);
     console.log('list: ', list);
@@ -15,7 +15,7 @@ const Previews = ({ list, loading, handleLoading, imgURL, index, targetInfo, han
         <h3>Card Previews</h3>
         {
           list?.map?.((data, mapIndex) => <Preview data={data} handleLoading={handleLoading} imgURL={imgURL}
-            loading={loading} key={mapIndex} index={index} targetInfo={targetInfo} handleRef={handleRef} />)
+            loading={loading} key={mapIndex} index={index} targetInfo={targetInfo} handleTaretInfo={handleTaretInfo} handleImgURL={handleImgURL} />)
         }
       </div>
 

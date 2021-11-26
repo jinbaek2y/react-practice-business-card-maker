@@ -11,6 +11,10 @@
   /* background-color: lightcyan;; */
   box-shadow: 7px 6px 5px 0px rgba(222,222,222,1);
 }
+.loading {
+  color: skyblue;
+  font-size: 2.2em;
+}
 
 .img {
   width: 10vw;
@@ -34,6 +38,7 @@
 }
 .name { 
   font-weight: 900;
+  /* color: black; */
 }
 .company {
   /* margin-bottom: 0.1em; */
