@@ -2,8 +2,10 @@ import React from 'react';
 import styles from './Card.module.css';
 import { useRef, useEffect } from 'react';
 import { useState } from 'react';
+import LoadingSpiner from '../../utility/LoadingSpiner';
 
 const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken }) => {
+  console.log(`${data ? data.name : 'templete'} Card called`);
   const [loading, setLoading] = useState(false);
   const hasData = data !== undefined;
   const name = hasData ? data.name : 'image file';
@@ -16,15 +18,12 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
   const titleRef = useRef(null);
   const messageRef = useRef(null);
   const containerRef = useRef(null);
-  // const infoInisialSet = () => {
-  //   nameRef.current.value = data.name;
-  //   colorRef.current.value = data.color;
-  //   companyRef.current.value = data.company
-  //   emailRef.current.value = data.email;
-  //   titleRef.current.value = data.title;
-  //   messageRef.current.value = data.message;
-  // }
-
+  useEffect(() => {
+    console.log(`${data ? data.name : 'templete'} Card mounted!...`);
+    return () => {
+      console.log(`${data?.name} Card unmounted... celan - up...`);
+    }
+  }, [data])
   useEffect(() => {
     if (data) {
       nameRef.current.value = data.name;
@@ -36,6 +35,9 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
       return;
     }
     colorRef.current.value = '#ffffff';
+    return () => {
+      console.log("Card unmounted... celan - up...");
+    }
   }, [data]);
 
   const handleLodaing = (bool) => {
@@ -60,7 +62,8 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
         },
         loadingInfo: {
           handleLodaing,
-        }
+        },
+        hasImgURLinDB: data.avatar_url ? true : false,
       }
       handleInfo(info);
       utility?.widget?.open();
@@ -111,6 +114,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
 
   const onClick = () => {
     if (data === undefined) {
+      console.log("in templete card onClick");
       // add method apply
       // console.log("onClick => add method");
       const info = {
@@ -124,7 +128,36 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
         'avatar_url': imgURL,
         'imgDeleteToken': imgDeleteToken,
       }
-      //
+      // image slect and click case -> loading target catch... info passing
+      // here
+      if (imgURL !== null) {
+        console.log("templete card has imgURL!: ", imgURL);
+        //form is work?
+        const info = {
+          totalInfo: {
+            'index': index,
+            'name': nameRef?.current?.value,
+            'color': colorRef?.current?.value,
+            'company': companyRef?.current?.value,
+            'email': emailRef?.current?.value,
+            'title': titleRef?.current?.value,
+            'message': messageRef?.current?.value,
+            'avatar_url': imgURL,
+            'imgDeleteToken': imgDeleteToken,
+          },
+          loadingInfo: {
+            handleLodaing,
+          },
+          hasImgURLinDB: false,
+        }
+        handleInfo(info);
+        infoRest();
+        // handleClick(info);
+        //setTimout -> img dlelete -> loading done, Preview
+        return;
+      }
+      console.log("templete card does not have imgURL!: ", imgURL);
+      console.log("info: ", info);
       handleClick(info);
       infoRest();
       handleImgURL(null);
@@ -134,6 +167,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
 
     // data has => callback => delete method apply
     // here
+    console.log("in data card onClick");
     handleClick(data?.index, data?.imgDeleteToken);
 
   }
@@ -160,10 +194,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
         </div>
         <div className={styles.buttons}>
           <button className={buttonClass} onClick={handleImg}>
-            {loading ? <div className={styles.spiner} >
-              {/* <i class="fas fa-spinner"></i> */}
-              <i className="fas fa-circle-notch fa-2x"></i>
-            </div> : `${name}`
+            {loading ? <LoadingSpiner /> : `${name}`
             }
           </button>
           <button className={styles.button} onClick={onClick}>{buttonType}</button>
