@@ -17,11 +17,25 @@
   z-index: 50;
 
 }
+
+@keyframes fadeIn {
+  0% {
+    
+    transform: scale(0) translate(-20em, -10em) rotate(60deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1.3) translate(0);
+    opacity: 1;
+  }
+}
 .login {
   /* background-color: lightblue; */
   width: 40vw;
   height: 40vh;
   z-index: 10;
+  animation: fadeIn 1.2s ease-in-out forwards;
 }
 
 .header {
