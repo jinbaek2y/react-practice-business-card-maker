@@ -2,12 +2,17 @@ import React from 'react';
 import Card from '../Card/Card';
 import styles from './Cards.module.css';
 import { useEffect } from 'react';
-const Cards = ({ list, handleAdd, handleDelete, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, imgDeleteToken, handleDeleteToken }) => {
+const Cards = ({ data, dataConfigs, setHandlers }) => {
+  console.log("Cards ->  setHandlers", setHandlers)
+  console.log("Cards -> dataConfigs", dataConfigs)
+  console.log("Cards -> data", data)
+  let list = data;
+
   console.log("Cards called");
   if (list !== null && !Array.isArray(list)) {
     list = Object.values(list);
   }
-
+  console.log("Cards -> list", list);
   useEffect(() => {
 
     return () => {
@@ -16,14 +21,12 @@ const Cards = ({ list, handleAdd, handleDelete, index, handleChange, imgURL, han
   }, [])
   return (
     <>
-
-
       <div className={styles.container}>
         <h3>Card Maker</h3>
         {
-          list?.map?.((data, mapIndex) => <Card handleClick={handleDelete} data={data} key={mapIndex} handleChange={handleChange} imgURL={imgURL} handleImgURL={handleImgURL} handleInfo={handleInfo} />)
+          list?.map?.((cardInfo) => <Card {...{ cardInfo, dataConfigs, setHandlers }} />)
         }
-        <Card handleClick={handleAdd} index={index} imgURL={imgURL} handleImgURL={handleImgURL} targetInfo={targetInfo} handleInfo={handleInfo} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
+        <Card {...{ dataConfigs, setHandlers }} />
       </div>
 
     </>

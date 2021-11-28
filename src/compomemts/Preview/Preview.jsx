@@ -4,8 +4,9 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
 import { moveText } from '../../utility/loadingText';
-const Preview = ({ data, index, imgURL, targetInfo, handleTaretInfo, handleImgURL, handleDeleteToken }) => {
+const Preview = ({ cardInfo: data, dataConfigs, setHandlers }) => {
   console.log(`${data?.name} Preview called`);
+
   const [loadingWithCard, setLoadingWithCard] = useState(false);
   const [hasLoadingDone, setHasLoadingDone] = useState(true);
   const defaultURL = '/images/default_logo.png';
@@ -34,13 +35,11 @@ const Preview = ({ data, index, imgURL, targetInfo, handleTaretInfo, handleImgUR
 
   useEffect(() => {
     console.log(`${data.name} Preview, deps=[imgURL, handleTaretInfo, handleImgURL, data] called`);
-    // console.log("in Preview, loading triiger UseEffect, imgURL: ", imgURL);
-    // console.log("in Preview, loading triiger UseEffect, hasLoadingDone: ", hasLoadingDone);
     if (!hasLoadingDone) return;
-    if (imgURL === null) return;
+    if (dataConfigs.imgURL === null) return;
     const coppiedImgRef = imgRef?.current;
     let handleLoad;
-    if (targetInfo !== null && targetInfo?.totalInfo?.index === data?.index) {
+    if (dataConfigs.targetInfo !== null && dataConfigs.targetInfo?.totalInfo?.index === data?.index) {
       console.log("targetInfo?.totalInfo?.index === data?.index");
       setLoadingWithCard(true);
       // console.log("setLoadingWithCard called");
@@ -56,12 +55,12 @@ const Preview = ({ data, index, imgURL, targetInfo, handleTaretInfo, handleImgUR
         console.log("Image onload!");
         // setTimeout(() => {
         // console.log("handleLoad inside setTimout Callback called");
-        targetInfo.loadingInfo.handleLodaing(false);
+        dataConfigs.targetInfo.loadingInfo.handleLodaing(false);
         setLoadingWithCard(false);
         handleInterval(intervalIdRef.current);
-        handleTaretInfo(null);
-        handleImgURL(null);
-        handleDeleteToken(null);
+        setHandlers.handleTaretInfo(null);
+        setHandlers.handleImgURL(null);
+        setHandlers.handleDeleteToken(null);
         setHasLoadingDone(true);
         coppiedImgRef.removeEventListener('load', handleLoad);
         // }, 10);
@@ -76,7 +75,8 @@ const Preview = ({ data, index, imgURL, targetInfo, handleTaretInfo, handleImgUR
     return () => {
       console.log(`${data?.name} Preview  deps=[imgURL, handleTaretInfo, handleImgURL, data]  clean - up`);
     }
-  }, [imgURL, handleTaretInfo, handleImgURL, handleDeleteToken, targetInfo, hasLoadingDone, data]);
+  }, [dataConfigs.imgURL, setHandlers.handleTaretInfo, setHandlers.handleImgURL, setHandlers.handleDeleteToken, dataConfigs.targetInfo, hasLoadingDone, data,
+    setHandlers]);
 
   useEffect(() => {
     console.log(`${data.name} Preview, [data, loadingWithCard] called`);

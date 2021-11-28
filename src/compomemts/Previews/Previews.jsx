@@ -2,24 +2,22 @@ import { React, useEffect } from 'react';
 import Preview from '../Preview/Preview';
 import styles from './Previews.module.css';
 
-const Previews = ({ list, loading, handleLoading, imgURL, index, targetInfo, handleRef, handleTaretInfo, handleImgURL, handleDeleteToken }) => {
+const Previews = ({ data, dataConfigs, setHandlers }) => {
   console.log("Previews called");
-  if (list !== null && !Array.isArray(list)) {
-    list = Object.values(list);
-    console.log('list: ', list);
+  if (data !== null && !Array.isArray(data)) {
+    data = Object.values(data);
+    console.log('data: ', data);
   }
+
   useEffect(() => {
     console.log("Previews unmounted... celan - up...");
   }, [])
   return (
     <>
-
-
       <div className={styles.container}>
         <h3>Card Previews</h3>
         {
-          list?.map?.((data, mapIndex) => <Preview data={data} handleLoading={handleLoading} imgURL={imgURL}
-            loading={loading} key={mapIndex} index={index} targetInfo={targetInfo} handleTaretInfo={handleTaretInfo} handleImgURL={handleImgURL} handleDeleteToken={handleDeleteToken} />)
+          data?.map?.((cardInfo, mapIndex) => <Preview {...{ cardInfo, dataConfigs, setHandlers }} key={mapIndex} />)
         }
       </div>
 

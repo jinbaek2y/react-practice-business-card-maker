@@ -15,11 +15,9 @@ function App({ firebase, cloudnary }) {
   const [data, setData] = useState(null);
   console.log("App, data: ", data);
   const [index, setIndex] = useState(null);
-  //widget -> useContext test do it
   const [imgURL, setImgURL] = useState(null);
   const [imgDeleteToken, setImgDeleteToken] = useState(null);
   const [targetInfo, setTargetInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
   const params = useParams();
   const utility = cloudnary?.utility;
   console.log("App -> utility", utility);
@@ -39,7 +37,7 @@ function App({ firebase, cloudnary }) {
 
   useEffect(() => {
     const path = userId;
-    firebase.subscribeValue(path, setData, setLoading);
+    firebase.subscribeValue(path, setData);
   }, [firebase, userId]);
 
   useEffect(() => {
@@ -112,21 +110,30 @@ function App({ firebase, cloudnary }) {
     setImgURL(url);
   }, []);
 
-  const handleLoading = useCallback((bool) => {
-    console.log("handleLoading called");
-    setLoading(bool)
-  }, []);
+  const dataConfigs = {
+    index,
+    imgURL,
+    targetInfo,
+    imgDeleteToken,
+  }
 
+  const setHandlers = {
+    handleAdd,
+    handleDelete,
+    handleChange,
+    handleImgURL,
+    handleTaretInfo,
+    handleInfo,
+    handleDeleteToken,
+  }
   return (
     <>
       <widgetContext.Provider value={utility?.widget}>
         <div className={styles.container}>
           <Header handleSignOut={firebase?.signOut} />
           <div className={styles.contents}>
-            <Cards list={data} handleAdd={handleAdd} handleDelete={handleDelete} index={index} handleChange={handleChange} imgURL={imgURL} handleImgURL={handleImgURL} handleInfo={handleInfo} targetInfo={targetInfo} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
-
-            <Previews list={data} loading={loading} handleLoading={handleLoading} imgURL={imgURL} index={index} targetInfo={targetInfo} handleTaretInfo={handleTaretInfo} handleImgURL={handleImgURL} handleDeleteToken={handleDeleteToken}
-            />
+            <Cards {...{ data, dataConfigs, setHandlers }} />
+            <Previews {...{ data, dataConfigs, setHandlers }} />
           </div>
           <Footer />
         </div>

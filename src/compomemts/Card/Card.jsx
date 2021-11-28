@@ -6,8 +6,10 @@ import LoadingSpiner from '../../utility/LoadingSpiner';
 import { widgetContext } from '../App/App';
 import { useContext } from 'react';
 
-const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, imgDeleteToken, handleDeleteToken }) => {
+
+const Card = ({ cardInfo: data, dataConfigs, setHandlers }) => {
   console.log(`${data ? data.name : 'templete'} Card called`);
+  const handleClick = data ? setHandlers.handleDelete : setHandlers.handleAdd;
   const [loading, setLoading] = useState(false);
   const widget = useContext(widgetContext);
   const hasData = data !== undefined;
@@ -66,15 +68,15 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
         },
         hasImgURLinDB: data.avatar_url ? true : false,
       }
-      handleInfo(info);
+      setHandlers.handleInfo(info);
       widget?.open();
       return;
     }
 
     // console.log("not exist, first !");
-    if (targetInfo !== null) {
+    if (dataConfigs.targetInfo !== null) {
       // console.log("target info --> null");
-      handleInfo(null);
+      setHandlers.handleInfo(null);
     }
     widget?.open();
   }
@@ -102,7 +104,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
       'imgDeleteToken': data.imgDeleteToken ? data.imgDeleteToken : null,
     }
 
-    handleChange?.(data.index, info);
+    setHandlers.handleChange?.(data.index, info);
   }
   const infoRest = () => {
     nameRef.current.value = null;
@@ -119,50 +121,50 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
       // add method apply
       // console.log("onClick => add method");
       const info = {
-        'index': index,
+        'index': dataConfigs.index,
         'name': nameRef?.current?.value,
         'color': colorRef?.current?.value,
         'company': companyRef?.current?.value,
         'email': emailRef?.current?.value,
         'title': titleRef?.current?.value,
         'message': messageRef?.current?.value,
-        'avatar_url': imgURL,
-        'imgDeleteToken': imgDeleteToken,
+        'avatar_url': dataConfigs.imgURL,
+        'imgDeleteToken': dataConfigs.imgDeleteToken,
       }
       // image slect and click case -> loading target catch... info passing
       // here
-      if (imgURL !== null) {
-        console.log("templete card has imgURL!: ", imgURL);
+      if (dataConfigs.imgURL !== null) {
+        console.log("templete card has imgURL!: ", dataConfigs.imgURL);
         //form is work?
         const info = {
           totalInfo: {
-            'index': index,
+            'index': dataConfigs.index,
             'name': nameRef?.current?.value,
             'color': colorRef?.current?.value,
             'company': companyRef?.current?.value,
             'email': emailRef?.current?.value,
             'title': titleRef?.current?.value,
             'message': messageRef?.current?.value,
-            'avatar_url': imgURL,
-            'imgDeleteToken': imgDeleteToken,
+            'avatar_url': dataConfigs.imgURL,
+            'imgDeleteToken': dataConfigs.imgDeleteToken,
           },
           loadingInfo: {
             handleLodaing,
           },
           hasImgURLinDB: false,
         }
-        handleInfo(info);
+        setHandlers.handleInfo(info);
         infoRest();
         // handleClick(info);
         //setTimout -> img dlelete -> loading done, Preview
         return;
       }
-      console.log("templete card does not have imgURL!: ", imgURL);
+      console.log("templete card does not have imgURL!: ", dataConfigs.imgURL);
       console.log("info: ", info);
       handleClick(info);
       infoRest();
-      handleImgURL(null);
-      handleDeleteToken(null);
+      setHandlers.handleImgURL(null);
+      setHandlers.handleDeleteToken(null);
       return;
     }
 
