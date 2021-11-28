@@ -6,11 +6,14 @@ import Header from "../Header/Header";
 import Previews from "../Previews/Previews";
 import Footer from "../Footer/Footer";
 import { createContext } from "react";
+import { useCallback } from "react";
 
 export const userContext = createContext();
 
 function App({ firebase, cloudnary }) {
+  console.log("App called");
   const [data, setData] = useState(null);
+  console.log("App, data: ", data);
   const [index, setIndex] = useState(null);
   //widget -> useContext test do it
   const [imgURL, setImgURL] = useState(null);
@@ -23,15 +26,13 @@ function App({ firebase, cloudnary }) {
   const userId = userInfo?.userId;
 
   useEffect(() => {
-    // console.log("cloudnary.setCallbacks.length: ", cloudnary.getCallbacksLength());
     if (cloudnary.getCallbacksLength() < 2) {
       cloudnary.setCallback(setImgURL);
       cloudnary.setCallback(setImgDeleteToken);
     }
-    // console.log('cloudary setCalbaas, is change?:', cloudnary);
 
     return () => {
-      console.log("app unmounted... celan - up...");
+      console.log("App unmounted... celan - up...");
     }
   }, [cloudnary]);
 
@@ -55,61 +56,77 @@ function App({ firebase, cloudnary }) {
 
         targetInfo.loadingInfo.handleLodaing(true);
         const path = `${userId}/${targetInfo.totalInfo.index}`;
+
+        if (targetInfo.hasImgURLinDB) {
+          cloudnary.deleteByToken(targetInfo.totalInfo.imgDeleteToken);
+        } else {
+          console.log("hasn ot imgURL in DB.../");
+        }
+
         targetInfo.totalInfo.avatar_url = imgURL;
-        cloudnary.deleteByToken(targetInfo.totalInfo.imgDeleteToken);
         targetInfo.totalInfo.imgDeleteToken = imgDeleteToken;
+        console.log("path: ", path);
+        console.group("imgURl, deleteToken well insert? :", targetInfo);
         firebase.setValue(path, targetInfo.totalInfo);
-        //loading trrigere?
-        // setImgURL(null);
         return;
       }
     }
   }, [imgURL, cloudnary, firebase, userId, targetInfo, imgDeleteToken]);
 
-  const onChange = (targetIndex, info) => {
+  const handleChange = useCallback((targetIndex, info) => {
     const path = `${userId}/${targetIndex}`;
     firebase.setValue(path, info);
-  }
+  }, [userId, firebase]);
 
-  const onAdd = (info) => {
+  const handleAdd = useCallback((info) => {
     // setTargetLoading(true);
     const path = `${userId}/${index}/`;
     firebase.setValue(path, info);
     setIndex(index + 1);
-  }
-  // handleClick(data?.index, data?.imgDeleteToken);
-  const onDelete = (targetIndex, imgDeleteToken) => {
+  }, [firebase, userId, index]);
+  const handleDelete = useCallback((targetIndex, imgDeleteToken) => {
     const path = `${userId}/${targetIndex}`;
 
     if (imgDeleteToken) {
-      console.log("in onDelete, imgDeleteToken: ", imgDeleteToken);
+      console.log("in handleDelete, imgDeleteToken: ", imgDeleteToken);
       cloudnary.deleteByToken(imgDeleteToken);
     }
 
     firebase.setValue(path, null);
-  };
+  }, [userId, firebase, cloudnary])
 
-  const handleInfo = (info) => {
+  const handleInfo = useCallback((info) => {
     setTargetInfo(info);
-  }
+  }, []);
 
-  const handleDeleteToken = (value) => {
+  const handleDeleteToken = useCallback((value) => {
     setImgDeleteToken(value);
-  }
+  }, []);
+
+  const handleTaretInfo = useCallback((info) => {
+    setTargetInfo(info);
+  }, []);
+
+  const handleImgURL = useCallback((url) => {
+    setImgURL(url);
+  }, []);
+
+  const handleLoading = useCallback((bool) => {
+    console.log("handleLoading called");
+    setLoading(bool)
+  }, []);
   return (
     <>
 
       <div className={styles.container}>
-        <userContext.Provider value={userInfo.userId}>
-          <Header handleSignOut={firebase?.signOut} />
-          <div className={styles.contents}>
-            <Cards list={data} handleAdd={onAdd} handleDelete={onDelete} index={index} handleChange={onChange} imgURL={imgURL} handleImgURL={setImgURL} handleInfo={handleInfo} targetInfo={targetInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
+        <Header handleSignOut={firebase?.signOut} />
+        <div className={styles.contents}>
+          <Cards list={data} handleAdd={handleAdd} handleDelete={handleDelete} index={index} handleChange={handleChange} imgURL={imgURL} handleImgURL={handleImgURL} handleInfo={handleInfo} targetInfo={targetInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
 
-            <Previews list={data} loading={loading} handleLoading={setLoading} imgURL={imgURL} index={index} targetInfo={targetInfo} handleTaretInfo={setTargetInfo} handleImgURL={setImgURL}
-            />
-          </div>
-          <Footer />
-        </userContext.Provider>
+          <Previews list={data} loading={loading} handleLoading={handleLoading} imgURL={imgURL} index={index} targetInfo={targetInfo} handleTaretInfo={handleTaretInfo} handleImgURL={handleImgURL} handleDeleteToken={handleDeleteToken}
+          />
+        </div>
+        <Footer />
       </div>
     </>
   );

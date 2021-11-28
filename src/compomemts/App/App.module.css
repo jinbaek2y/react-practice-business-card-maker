@@ -2,6 +2,12 @@
   box-sizing: border-box;
   margin: 0;
 }
+
+:root {
+  --max-width: 800px;
+  --test-color: blue;
+}
+
 .container {
   /* padding: 0.15em 0; */
   position: relative;
@@ -48,6 +54,7 @@
   margin: 0;
   display: flex;
   color:  #3B5463;
+  /* color: var(--test-color); */
   font-weight: 700;
   /* flex-direction: column; */
   /* overflow: scroll; */
@@ -67,6 +74,12 @@
   padding: 0.2em 0.5em;
   /* height: 100%; */
   /* background-color: lightskyblue; */
+}
+
+@media (max-width:700px) {
+  .contents {
+    flex-direction: column;
+  }
 }
 .footer {
   background-color: #3B5463;

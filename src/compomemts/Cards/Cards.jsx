@@ -1,11 +1,19 @@
 import React from 'react';
 import Card from '../Card/Card';
 import styles from './Cards.module.css';
+import { useEffect } from 'react';
 const Cards = ({ list, handleAdd, handleDelete, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken }) => {
+  console.log("Cards called");
   if (list !== null && !Array.isArray(list)) {
     list = Object.values(list);
-    // console.log('list: ', list);
   }
+
+  useEffect(() => {
+
+    return () => {
+      console.log("Cards unmounted... celan - up...");
+    }
+  }, [])
   return (
     <>
 
