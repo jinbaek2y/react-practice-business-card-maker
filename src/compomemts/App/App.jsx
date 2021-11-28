@@ -8,7 +8,7 @@ import Footer from "../Footer/Footer";
 import { createContext } from "react";
 import { useCallback } from "react";
 
-export const userContext = createContext();
+export const widgetContext = createContext();
 
 function App({ firebase, cloudnary }) {
   console.log("App called");
@@ -22,6 +22,7 @@ function App({ firebase, cloudnary }) {
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const utility = cloudnary?.utility;
+  console.log("App -> utility", utility);
   const userInfo = { userId: params?.userId };
   const userId = userInfo?.userId;
 
@@ -115,19 +116,21 @@ function App({ firebase, cloudnary }) {
     console.log("handleLoading called");
     setLoading(bool)
   }, []);
+
   return (
     <>
+      <widgetContext.Provider value={utility?.widget}>
+        <div className={styles.container}>
+          <Header handleSignOut={firebase?.signOut} />
+          <div className={styles.contents}>
+            <Cards list={data} handleAdd={handleAdd} handleDelete={handleDelete} index={index} handleChange={handleChange} imgURL={imgURL} handleImgURL={handleImgURL} handleInfo={handleInfo} targetInfo={targetInfo} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
 
-      <div className={styles.container}>
-        <Header handleSignOut={firebase?.signOut} />
-        <div className={styles.contents}>
-          <Cards list={data} handleAdd={handleAdd} handleDelete={handleDelete} index={index} handleChange={handleChange} imgURL={imgURL} handleImgURL={handleImgURL} handleInfo={handleInfo} targetInfo={targetInfo} utility={utility} imgDeleteToken={imgDeleteToken} handleDeleteToken={handleDeleteToken} />
-
-          <Previews list={data} loading={loading} handleLoading={handleLoading} imgURL={imgURL} index={index} targetInfo={targetInfo} handleTaretInfo={handleTaretInfo} handleImgURL={handleImgURL} handleDeleteToken={handleDeleteToken}
-          />
+            <Previews list={data} loading={loading} handleLoading={handleLoading} imgURL={imgURL} index={index} targetInfo={targetInfo} handleTaretInfo={handleTaretInfo} handleImgURL={handleImgURL} handleDeleteToken={handleDeleteToken}
+            />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </widgetContext.Provider>
     </>
   );
 }

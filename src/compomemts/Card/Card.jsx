@@ -3,10 +3,13 @@ import styles from './Card.module.css';
 import { useRef, useEffect } from 'react';
 import { useState } from 'react';
 import LoadingSpiner from '../../utility/LoadingSpiner';
+import { widgetContext } from '../App/App';
+import { useContext } from 'react';
 
-const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, utility, imgDeleteToken, handleDeleteToken }) => {
+const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, handleInfo, targetInfo, imgDeleteToken, handleDeleteToken }) => {
   console.log(`${data ? data.name : 'templete'} Card called`);
   const [loading, setLoading] = useState(false);
+  const widget = useContext(widgetContext);
   const hasData = data !== undefined;
   const name = hasData ? data.name : 'image file';
   const buttonType = hasData ? 'Delete' : 'Add';
@@ -44,9 +47,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
     setLoading(bool);
   }
   const handleImg = () => {
-    // console.log("in handleImg, widget exis? :", utility?.widget);
-
-    if (data !== undefined && utility?.widget) {
+    if (data !== undefined && widget) {
       // console.log("alreay exist thing, modifying....");
       const info = {
         totalInfo: {
@@ -66,7 +67,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
         hasImgURLinDB: data.avatar_url ? true : false,
       }
       handleInfo(info);
-      utility?.widget?.open();
+      widget?.open();
       return;
     }
 
@@ -75,7 +76,7 @@ const Card = ({ handleClick, data, index, handleChange, imgURL, handleImgURL, ha
       // console.log("target info --> null");
       handleInfo(null);
     }
-    utility?.widget?.open();
+    widget?.open();
   }
 
   const onChange = (e) => {
