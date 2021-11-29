@@ -118,47 +118,67 @@ const Card = ({ cardInfo: data, dataConfigs, setHandlers }) => {
   const onClick = () => {
     if (data === undefined) {
       console.log("in templete card onClick");
-      // add method apply
-      // console.log("onClick => add method");
-      const info = {
-        'index': dataConfigs.index,
-        'name': nameRef?.current?.value,
-        'color': colorRef?.current?.value,
-        'company': companyRef?.current?.value,
-        'email': emailRef?.current?.value,
-        'title': titleRef?.current?.value,
-        'message': messageRef?.current?.value,
-        'avatar_url': dataConfigs.imgURL,
-        'imgDeleteToken': dataConfigs.imgDeleteToken,
-      }
-      // image slect and click case -> loading target catch... info passing
-      // here
-      if (dataConfigs.imgURL !== null) {
-        console.log("templete card has imgURL!: ", dataConfigs.imgURL);
-        //form is work?
+      if (dataConfigs.imgURL === null) {
+        console.log("onClick => add method, has not imgURL");
         const info = {
-          totalInfo: {
-            'index': dataConfigs.index,
-            'name': nameRef?.current?.value,
-            'color': colorRef?.current?.value,
-            'company': companyRef?.current?.value,
-            'email': emailRef?.current?.value,
-            'title': titleRef?.current?.value,
-            'message': messageRef?.current?.value,
-            'avatar_url': dataConfigs.imgURL,
-            'imgDeleteToken': dataConfigs.imgDeleteToken,
-          },
-          loadingInfo: {
-            handleLodaing,
-          },
-          hasImgURLinDB: false,
+          'index': dataConfigs.index,
+          'name': nameRef?.current?.value,
+          'color': colorRef?.current?.value,
+          'company': companyRef?.current?.value,
+          'email': emailRef?.current?.value,
+          'title': titleRef?.current?.value,
+          'message': messageRef?.current?.value,
+          'avatar_url': dataConfigs.imgURL,
+          'imgDeleteToken': dataConfigs.imgDeleteToken,
         }
         setHandlers.handleInfo(info);
-        infoRest();
-        // handleClick(info);
-        //setTimout -> img dlelete -> loading done, Preview
+        setHandlers.handleCreatedAt()
         return;
       }
+
+      // if (dataConfigs.imgURL !== null) {
+      console.log("onClick => add method, has imgURL");
+      // const info = {
+      //   'index': dataConfigs.index,
+      //   'name': nameRef?.current?.value,
+      //   'color': colorRef?.current?.value,
+      //   'company': companyRef?.current?.value,
+      //   'email': emailRef?.current?.value,
+      //   'title': titleRef?.current?.value,
+      //   'message': messageRef?.current?.value,
+      //   'avatar_url': dataConfigs.imgURL,
+      //   'imgDeleteToken': dataConfigs.imgDeleteToken,
+      // }
+      // image slect and click case -> loading target catch... info passing
+      // here
+      // if (dataConfigs.imgURL !== null) {
+      console.log("templete card has imgURL!: ", dataConfigs.imgURL);
+      //form is work?
+      const info = {
+        totalInfo: {
+          'index': dataConfigs.index,
+          'name': nameRef?.current?.value,
+          'color': colorRef?.current?.value,
+          'company': companyRef?.current?.value,
+          'email': emailRef?.current?.value,
+          'title': titleRef?.current?.value,
+          'message': messageRef?.current?.value,
+          'avatar_url': dataConfigs.imgURL,
+          'imgDeleteToken': dataConfigs.imgDeleteToken,
+        },
+        loadingInfo: {
+          handleLodaing,
+        },
+        hasImgURLinDB: false,
+      }
+      setHandlers.handleCreatedAt()
+      setHandlers.handleInfo(info);
+      infoRest();
+      // handleClick(info);
+      //setTimout -> img dlelete -> loading done, Preview
+      return;
+      // }
+
       console.log("templete card does not have imgURL!: ", dataConfigs.imgURL);
       console.log("info: ", info);
       handleClick(info);
@@ -167,6 +187,7 @@ const Card = ({ cardInfo: data, dataConfigs, setHandlers }) => {
       setHandlers.handleDeleteToken(null);
       return;
     }
+
 
     // data has => callback => delete method apply
     // here

@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
 import { moveText } from '../../utility/loadingText';
+
 const Preview = ({ cardInfo: data, dataConfigs, setHandlers }) => {
   console.log(`${data?.name} Preview called`);
-
   const [loadingWithCard, setLoadingWithCard] = useState(false);
   const [hasLoadingDone, setHasLoadingDone] = useState(true);
   const defaultURL = '/images/default_logo.png';
