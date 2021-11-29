@@ -4,6 +4,19 @@ import { getAuth, signInWithPopup, signOut, GoogleAuthProvider } from "firebase/
 class FirebaseService {
   auth = {};
 
+  getTimeStamp(setCallback) {
+    const offsetRef = ref(database, ".info/serverTimeOffset");
+    onValue(offsetRef, (snap) => {
+      const offset = snap.val();
+      const estimatedServerTimeMs = new Date().getTime() + offset;
+      console.log("offsetRef: ", offsetRef);
+      console.log("FirebaseService -> timeTest -> estimatedServerTimeMs", estimatedServerTimeMs);
+      setCallback(estimatedServerTimeMs);
+    }, {
+      onlyOnce: true,
+    });
+  }
+
   subscribeValue(path, dataCallback) {
     onValue(ref(database, path), (snapshot) => {
       console.log("subscribeValue snapshot", snapshot)
@@ -15,8 +28,8 @@ class FirebaseService {
     }
     )
   }
-
   setValue(path, info) {
+    console.log("in setValue called, info: ", info);
     set(ref(database, path), info)
       .then((res) => {
         console.log("[setValue] data saved successfully, res: ", res);
@@ -43,7 +56,7 @@ class FirebaseService {
     const auth = getAuth();
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
+        // This gives you a Google Access Token. You can use it to access the Google ANum
         const user = result.user;
         navigate(`/app/${user.providerData[0].uid}`);
       }).catch((error) => {
